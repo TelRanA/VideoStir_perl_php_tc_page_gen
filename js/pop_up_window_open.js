@@ -21,4 +21,12 @@ var popupParameters = "resizable=no,scrollbars=no,status=no,width=" + width + ",
   };
 }
 
+function resizeBody(w,h){
+        myWindow = document.
+		myWindow.resizeTo(w,h);
+    myWindow.focus();
+        alert(height);
+        alert(width);
+    }
+
 

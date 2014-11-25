@@ -180,8 +180,8 @@ sub handle_line_from_input(){
 		if (/\(.*?,\s*(\d+?)\s*,\s*(\d+?)\s*,/){
 			$player_w = $1;
 			$player_h = $2;
-			$parameters .= "Player Width = $player_w\n"; 
-			$parameters .= "Player Hight = $player_h\n"; 
+			$parameters .= "Player Width = $player_w px\n"; 
+			$parameters .= "Player Hight = $player_h px\n"; 
 		}
 
 		#	Calculate rectangle coordinates from player position and dimentions
@@ -228,24 +228,24 @@ sub handle_line_from_input(){
 		#	20 from the left of the screen
 
 		#	top
-		if (/{\s*["']top["']\s*:\s*["'](\d+?)px["']\s*,\s*["']\w+?["']:["']\d+?px["']}/i){
+		if (/["']top["']\s*:\s*["'](\d+?)px["']/i){
 			$y1 = $1;
 			$parameters .= "Player Position = $1 px from top\n";
 		}			
 
 		#	bottom
-		if (/{\s*["']bottom["']\s*:\s*["'](\d+?)px["']\s*,\s*["']\w+?["']:["']\d+?px["']}/i){
+		if (/["']bottom["']\s*:\s*["'](\d+?)px["']/i){
 			$y1 = $canvas_h - $player_h - $1;
 			$parameters .= "Player Position = $1 px from bottom\n";			
 		}
 		#	left
-		if (/{\s*["']\w+?["']\s*:\s*["']\d+?px["']\s*,\s*["']left["']:["'](\d+?)px["']}/i){
+		if (/["']left["']:["'](\d+?)px["']/i){
 			$x1 = $1;
 			$parameters .= "Player Position = $1 px from left\n";			
 		}
  
 		#	right
-		if (/{\s*["']\w+?["']\s*:\s*["']\d+?px["']\s*,\s*["']right["']:["'](\d+?)px["']}/i){
+		if (/["']right["']:["'](\d+?)px["']/i){
 			$x1 = $canvas_w - $player_w - $1;
 			$parameters .= "Player Position = $1 px from right\n";			
 		}
@@ -262,7 +262,7 @@ sub handle_line_from_input(){
 		#	Shift clip right/left inside player. 
 		#	50 will shift clip 50 pixels to the right.
 		#	-50 will shift to the left.
-		if (/['"]\s*offset-x\s*['"]\s*:\s*([+-]??\d+)\s*,/i){
+		if (/['"]\s*offset-x\s*['"]\s*:\s*([+-]?\d+)/i){
 			$x3 = $x1 + $1;		
 			$parameters .= "Video Offset horizontal = $1 px (relative to Player)\n";			
 		}
@@ -271,7 +271,7 @@ sub handle_line_from_input(){
 		#	Shift clip up/down inside player. 
 		#	50 will shift clip 50 pixels to the top. 
 		#	-50 will shift to the bottom.
-		if (/['"]\s*offset-y\s*['"]\s*:\s*([+-]??\d+)\s*,/i){
+		if (/['"]\s*offset-y\s*['"]\s*:\s*([+-]?\d+)/i){
 			$y3 = $y1 + $1;		
 			$parameters .= "Video Offset vertical = $1 px (relative to Player)\n";			
 		}
@@ -280,7 +280,7 @@ sub handle_line_from_input(){
 		
 		#	playback-delay - (delay) 
 		#	how many seconds to wait before running
-		if (/['"]\s*playback-delay\s*['"]\s*:\s*(\d+)\s*,/i){
+		if (/['"]\s*playback-delay\s*['"]\s*:\s*(\d+)/i){
 			$playbackDelay = $1;		
 			$parameters .= "Video Playback Delay = $1 S\n";			
 		}
@@ -288,7 +288,7 @@ sub handle_line_from_input(){
 		#	auto-play - (auto play)
 		#	"true" start playing 
 		#	"false" display a big play button
-		if (/['"]\s*auto-play\s*['"]\s*:\s*['"]*(\w+)['"]*,/i){
+		if (/['"]\s*auto-play\s*['"]\s*:\s*['"]?(\w+)['"]?/i){
 			my $autoPlay = $1;		
 			$parameters .= "Video auto play = $1\n";			
 		}
@@ -296,7 +296,7 @@ sub handle_line_from_input(){
 		#	freeze - (freezes the clip)
 		#	After X frames the clip will freeze and a play button will appear. 
 		#	Catch the visitors eye while avoiding auto-playing the clip
-		if (/['"]\s*freeze\s*['"]\s*:\s*(\d+)\s*,/i){
+		if (/['"]\s*freeze\s*['"]\s*:\s*(\d+)/i){
 			my $freeze = $1;		
 			$parameters .= "clip will freeze after = $1 frames\n";
 		}
@@ -304,7 +304,7 @@ sub handle_line_from_input(){
 		#	auto-play-limit - (when to stop auto play) 
 		#	how many times to play clip on browser before moving to 
 		#	auto-play-limit=false mode and display play button.
-		if (/['"]\s*auto-play-limit\s*['"]\s*:\s*(\d+)\s*,/i){
+		if (/['"]\s*auto-play-limit\s*['"]\s*:\s*(\d+)/i){
 			my $autoPlayLimit = $1;		
 			$parameters .= "clip will play automatically = $1 times\n";
 		}
@@ -314,7 +314,7 @@ sub handle_line_from_input(){
 		#	"remove"-removes the player, 
 		#	"play-button"-will show a play button, 
 		#	"blank" leave an empty frame
-		if (/['"]\s*on-finish\s*['"]\s*:\s*['"]*(.+?)['"]*,/i){
+		if (/['"]\s*on-finish\s*['"]\s*:\s*['"](.+?)['"]/i){
 			my $onFinish = $1;		
 			$parameters .= "after the clip ends = $1\n";			
 		}
@@ -322,14 +322,14 @@ sub handle_line_from_input(){
 		#	disable-player-threshold - (when to stop presenting player at all ) 
 		#	After X views on browser. 
 		#	The player will stop loading at all.
-		if (/['"]\s*disable-player-threshold\s*['"]\s*:\s*(\d+)\s*,/i){
+		if (/['"]\s*disable-player-threshold\s*['"]\s*:\s*(\d+)/i){
 			my $disablePlayerThreshold = $1;		
 			$parameters .= "The player will stop loading at all after = $1 views on browser\n";
 		}
 
 		#	on-click-open-url - (redirects to url of choice when clicking on clip) 
 		#	To which webpage to "jump" when clicking on clip's area "click on me..."
-		if (/['"]\s*on-click-open-url\s*['"]\s*:\s*['"](\S+?)['"]\s*,/i){
+		if (/['"]\s*on-click-open-url\s*['"]\s*:\s*['"](\S+?)['"]/i){
 			my $onClickOpenUrl = $1;		
 			$parameters .= "when clicking on clip, it redirects  to = $1\n";			
 		}
@@ -338,7 +338,7 @@ sub handle_line_from_input(){
 		#	zoom 100 means without zoom. 
 		#	200 means double size. 
 		#	50 means half the size
-		if (/['"]\s*zoom\s*['"]\s*:\s*(\d+)\s*[,}]/i){
+		if (/['"]\s*zoom\s*['"]\s*:\s*(\d+)/i){
 			$x4 = $x3 + ($player_w*$1)/100;
 			$y4 = $y3 + ($player_h*$1)/100;		
 			$parameters .= "Video Zoom = $1 % (relative to Player)\n";			
@@ -347,7 +347,7 @@ sub handle_line_from_input(){
 		#	rotation - (rotate clip-clockwise) 
 		#	rotate 90 means rotate clockwise 90 degrees (on the size). 
 		#	180 degrees means up side down. 270 means on the left side
-		if (/['"]\s*rotation\s*['"]\s*:\s*(\d+)\s*,/i){
+		if (/['"]\s*rotation\s*['"]\s*:\s*(\d+)/i){
 			my $rotation = $1;		
 			$parameters .= "rotation = $1 degrees\n";
 		}
@@ -355,7 +355,7 @@ sub handle_line_from_input(){
 		#	extrab - (extra buffer) 
 		#	how many extra seconds to wait to assure 
 		#	smooth run for bigger clips and shaky connections
-		if (/['"]\s*extrab\s*['"]\s*:\s*(\d+)\s*,/i){
+		if (/['"]\s*extrab\s*['"]\s*:\s*(\d+)/i){
 			my $extrab = $1;		
 			$parameters .= "extra buffer = $1 S\n";
 		}
@@ -454,10 +454,7 @@ body {
 <p id=\"time\" onclick=\"startstoptimer()\">00.00</p>
 <h2>Parameters:</h2>
 <table width=\"100%\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\" id=\"parameters\">
-    <tr>
-      <th align=\"right\">Parameter</th>
-      <th align=\"left\">Value</th>
-    </tr>
+<tr><th align=\"right\">Parameter</th><th align=\"left\">Value</th></tr>
 $parameters
 </table>
 $line1
@@ -471,8 +468,8 @@ $line3
 </HTML>";
 		close $tcFh;
 		
-		my $popupWindowW = $canvas_w+2;
-		my $popupWindowH = $canvas_h+2;
+		my $popupWindowW = $canvas_w;
+		my $popupWindowH = $canvas_h+4;
 		
 		print $indexFh "|&nbsp;<a href=$tc.html ".
 						"target=\"$tc\" ".
